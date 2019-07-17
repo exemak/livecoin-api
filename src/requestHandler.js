@@ -39,7 +39,14 @@ class RequestHandler {
         : `${this.baseUrl}/${endpoint}?${queryString}`;
 
       fetch(uri, requestInfo)
-        .then(res => resolve(res.json()))
+        .then(res => res.text())
+        .then(text => {
+          try {
+            return resolve(JSON.parse(text));
+          } catch(e) {
+            return resolve(text);
+          }
+        })
         .catch(err => reject(err));
     });
   }
